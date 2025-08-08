@@ -439,3 +439,8 @@ function addChatMessage(text, sender) {
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
 }
+
+function change(){
+  document.body.style.backgroundColor="rgb(68, 65, 65)";
+  document.container.style.backgroundColor="rgb(68, 65, 65)";
+}

@@ -269,3 +269,24 @@ h3{
   cursor: pointer;
   color: white;
 }
+.background {
+  position: fixed;
+  bottom: 20px;
+  left: 400px;
+  background: #222; /* Dark background */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  z-index: 1000;
+  min-width: 200px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-left: 500px;
+}
+
+.background:hover {
+  background: #444;
+}
