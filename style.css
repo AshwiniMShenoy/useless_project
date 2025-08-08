@@ -57,3 +57,57 @@ body {
     color: gray;
   }
   
+  /* Layout to make sidebar + task manager side by side */
+.layout {
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Left Sidebar (Games Section) */
+  .sidebar {
+    width: 250px;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-right: 1px solid #333;
+    border-radius: 10px;
+  }
+  
+  .sidebar h2 {
+    font-size: 18px;
+    color: #ff4d4d;
+    margin-bottom: 20px;
+  }
+  
+  /* Each game block (title + embedded game) */
+  .game-block {
+    margin-bottom: 20px;
+  }
+  
+  .game-block button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .game-block button:hover {
+    background-color: #555;
+  }
+  
+  .game-container {
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: none;
+    font-size: 0.9rem;
+    
+  }
+  
+  
+  
+  
