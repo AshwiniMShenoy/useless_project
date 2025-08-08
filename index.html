@@ -10,12 +10,26 @@
   <div class="container">
     <h1>😈 Evil Task Manager</h1>
 
-    <div class="input-group">
-      <input id="taskInput" type="text" placeholder="What's your next failure?" />
+    <div class="task-controls">
+      <input type="text" id="taskInput" placeholder="What fake goal are you pretending to achieve?" />
+      <select id="colorPicker">
+        <option value="">Color</option>
+        <option value="yellow">🟡</option>
+        <option value="red">🔴</option>
+        <option value="green">🟢</option>
+        <option value="blue">🔵</option>
+      </select>
+      <select id="tagPicker">
+        <option value="">Tag</option>
+        <option value="Procrastination">Procrastination</option>
+        <option value="Chaos">Chaos</option>
+        <option value="Random">Random</option>
+      </select>
       <button onclick="addTask()">Add</button>
+      <button onclick="suggestTask()">🎲 Suggest Evil Task</button>
     </div>
 
-    <ul id="taskList"></ul>
+    <div id="taskList" class="task-list"></div>
   </div>
 
   <script src="app.js"></script>

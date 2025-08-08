@@ -1,83 +1,59 @@
 body {
-    margin: 0;
-    padding: 0;
     background-color: #121212;
-    color: #fff;
+    color: white;
     font-family: 'Courier New', monospace;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100vh;
-    padding-top: 40px;
+    padding: 20px;
   }
   
   .container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    text-align: center;
+    max-width: 600px;
+    margin: auto;
   }
   
   h1 {
-    color: #ff4c4c;
+    color: red;
+    text-align: center;
     margin-bottom: 20px;
   }
   
-  .input-group {
+  .task-controls {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 20px;
   }
   
-  input[type="text"] {
-    flex: 1;
+  .task-controls input, select, button {
     padding: 10px;
-    border: 1px solid #333;
-    background-color: #1e1e1e;
-    color: white;
-    border-radius: 4px;
-    font-size: 14px;
+    border: none;
+    border-radius: 5px;
   }
   
   button {
-    padding: 10px 16px;
-    background-color: #e60000;
-    border: none;
+    background-color: red;
     color: white;
-    font-weight: bold;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.3s ease;
   }
   
   button:hover {
-    background-color: #ff1a1a;
+    background-color: darkred;
   }
   
-  ul#taskList {
-    list-style: none;
-    padding: 0;
-  }
-  
-  ul#taskList li {
+  .task-card {
     background-color: #1e1e1e;
-    padding: 12px;
+    padding: 10px;
+    border-radius: 5px;
     margin-bottom: 10px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
   }
   
-  ul#taskList li button {
-    background-color: transparent;
-    border: none;
-    color: #00cc66;
-    font-size: 18px;
-    cursor: pointer;
+  .task-card .actions {
+    position: absolute;
+    right: 10px;
+    top: 10px;
   }
   
-  ul#taskList li button:hover {
-    color: #00ff88;
+  .task-card .tag {
+    font-size: 0.8rem;
+    color: gray;
   }
   
