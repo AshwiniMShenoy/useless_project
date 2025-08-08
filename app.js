@@ -1,20 +1,62 @@
 let tasks = [];
 let voices = [];
+let currentTagFilter = "";
+
 
 window.speechSynthesis.onvoiceschanged = () => {
   voices = speechSynthesis.getVoices();
   console.log("Voices loaded:", voices.map(v => v.name));
 };
 
+const evilPhrases = {
+  add: [
+    "Another one? Glutton for punishment, aren't you?",
+    "That task’s not going to finish itself. Or will it?",
+    "Interesting... you think you'll finish that?"
+  ],
+  complete: [
+    "Well done... but was it worth it?",
+    "One down. Millions to go.",
+    "Impressive. I'm almost proud. Almost."
+  ],
+  delete: [
+    "Deleted. Like your hopes.",
+    "Gone. Just like your focus.",
+    "Clean slate? More like empty brain."
+  ],
+  edit: [
+    "You changed it? As if that helps...",
+    "Editing, huh? Pretending to be productive again?",
+    "You really think that'll make a difference? Cute."
+  ],
+  pin: [
+    "Oh wow. You pinned it. So ambitious.",
+    "Pinned? Does that make it feel important now?",
+    "That task is going nowhere. But sure, pin it."
+  ]
+};
+
+function getRandomPhrase(type) {
+  const phrases = evilPhrases[type] || [];
+  return phrases[Math.floor(Math.random() * phrases.length)];
+}
+
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voice = voices.find(v => v.name === "Microsoft David - English (United States)");
+  if (voice) utterance.voice = voice;
+  utterance.pitch = 0.4;
+  utterance.rate = 0.7;
+  utterance.volume = 1;
+  speechSynthesis.speak(utterance);
+}
 
 function addTask() {
   const input = document.getElementById("taskInput");
   const color = document.getElementById("colorPicker").value;
   const tag = document.getElementById("tagPicker").value;
   const text = input.value.trim();
-
   if (text === "") return;
-
   const task = {
     id: Date.now(),
     text,
@@ -22,23 +64,27 @@ function addTask() {
     tag,
     pinned: false
   };
-
   tasks.push(task);
   input.value = "";
   renderTasks();
+  speak(getRandomPhrase("add"));
 }
 
 function renderTasks() {
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
-  const sorted = [...tasks].sort((a, b) => b.pinned - a.pinned);
+  let filtered = [...tasks];
+  if (currentTagFilter) {
+    filtered = filtered.filter(task => task.tag === currentTagFilter);
+  }
+
+  const sorted = filtered.sort((a, b) => b.pinned - a.pinned);
 
   sorted.forEach((task) => {
     const card = document.createElement("div");
     card.className = "task-card";
     card.style.borderLeft = `5px solid ${task.color || "#555"}`;
-
     card.innerHTML = `
       <div class="content">${task.text}</div>
       <div class="tag">${task.tag || "No Tag"}</div>
@@ -48,15 +94,22 @@ function renderTasks() {
         <button onclick="deleteTask(${task.id})">🗑️</button>
       </div>
     `;
-
     list.appendChild(card);
   });
 }
 
+
+function sortByTag() {
+  const dropdown = document.getElementById("tagSort");
+  currentTagFilter = dropdown.value;
+  renderTasks();
+}
+
+
 function pinTask(id) {
   const task = tasks.find(t => t.id === id);
   task.pinned = !task.pinned;
-  speak(`Oh wow. You pinned "${task.text}". So ambitious.`);
+  speak(getRandomPhrase("pin"));
   renderTasks();
 }
 
@@ -65,32 +118,17 @@ function editTask(id) {
   const newText = prompt("Edit your empty dreams:", task.text);
   if (newText) {
     task.text = newText;
-    speak(`You changed it? As if that helps...`);
+    speak(getRandomPhrase("edit"));
     renderTasks();
   }
 }
 
 function deleteTask(id) {
   const task = tasks.find(t => t.id === id);
-  speak(`Deleting "${task.text}"? Classic.`);
+  speak(getRandomPhrase("delete"));
   tasks = tasks.filter(t => t.id !== id);
   renderTasks();
 }
-
-function speak(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  const voice = voices.find(v => v.name === "Google Deutsch");
-
-  if (voice) {
-    utterance.voice = voice;
-  }
-  utterance.pitch = 0.4;   // 👈 Deep tone (lower = more evil)
-  utterance.rate = 0.7;    // 👈 Slower = more dramatic
-  utterance.volume = 1.0;  // 👈 Optional — loud and clear
-  speechSynthesis.speak(utterance);
-}
-
-
 
 function suggestTask() {
   const ideas = [
@@ -100,16 +138,40 @@ function suggestTask() {
     "Try to remember what productivity feels like",
     "Start 3 side projects and finish none"
   ];
-
+  
   const idea = ideas[Math.floor(Math.random() * ideas.length)];
+  
   document.getElementById("taskInput").value = idea;
+  document.getElementById("colorPicker").value = "#000000"; // Force black color
   speak(`Here's a great idea: ${idea}`);
 }
 
-// ==========================
-// 🎮 GAME ZONE
-// ==========================
 
+// ====================
+// THEME SWITCHER (no localStorage)
+// ====================
+function setTheme(theme) {
+  const body = document.body;
+  body.classList.remove("lazy-mode", "villain-mode", "chaos-mode");
+  switch (theme) {
+    case "lazy":
+      body.classList.add("lazy-mode");
+      speak("Activating... Lazy mode.");
+      break;
+    case "villain":
+      body.classList.add("villain-mode");
+      speak("Villain mode. Finally, some darkness.");
+      break;
+    case "chaos":
+      body.classList.add("chaos-mode");
+      speak("Welcome to... Chaos.");
+      break;
+  }
+}
+
+// ====================
+// GAME ZONE
+// ====================
 function toggleGame(gameId) {
   const gameDiv = document.getElementById(gameId);
   if (gameDiv.style.display === "block") {
@@ -129,7 +191,7 @@ function loadGame(id, container) {
   }
 }
 
-// 🟩 TIC TAC TOE
+// TIC TAC TOE
 let board = ["", "", "", "", "", "", "", "", ""];
 let gameOver = false;
 let userWins = 0;
@@ -138,14 +200,13 @@ let botWins = 0;
 function generateTicTacToe() {
   board = ["", "", "", "", "", "", "", "", ""];
   gameOver = false;
-
   return `
     <table id="ticBoard" style="margin:auto;border-collapse:collapse;">
       ${[0, 1, 2].map(row => `
         <tr>
           ${[0, 1, 2].map(col => {
             const index = row * 3 + col;
-            return `<td id="cell${index}" onclick="playerMove(${index})" 
+            return `<td id="cell${index}" onclick="playerMove(${index})"
                     style="width:40px;height:40px;border:1px solid white;text-align:center;font-size:1.2rem;"></td>`;
           }).join("")}
         </tr>`).join("")}
@@ -158,10 +219,8 @@ function generateTicTacToe() {
 
 function playerMove(index) {
   if (gameOver || board[index] !== "") return;
-
   board[index] = "X";
   updateBoard();
-
   if (checkWinner("X")) {
     gameOver = true;
     userWins++;
@@ -169,32 +228,24 @@ function playerMove(index) {
     document.getElementById("turnInfo").innerText = "🎉 You win!";
     return;
   }
-
   if (isDraw()) {
     document.getElementById("turnInfo").innerText = "😐 It's a draw.";
     gameOver = true;
     return;
   }
-
   setTimeout(botMove, 500);
 }
 
 function botMove() {
   if (gameOver) return;
-
-  // 1. Try to win
   let move = findBestMove("O");
-  // 2. Try to block
   if (move === -1) move = findBestMove("X");
-  // 3. Pick random
   if (move === -1) {
     const empty = board.map((v, i) => v === "" ? i : null).filter(i => i !== null);
     move = empty[Math.floor(Math.random() * empty.length)];
   }
-
   board[move] = "O";
   updateBoard();
-
   if (checkWinner("O")) {
     gameOver = true;
     botWins++;
@@ -202,7 +253,6 @@ function botMove() {
     document.getElementById("turnInfo").innerText = "😈 Bot wins!";
     return;
   }
-
   if (isDraw()) {
     document.getElementById("turnInfo").innerText = "😐 It's a draw.";
     gameOver = true;
@@ -210,21 +260,14 @@ function botMove() {
 }
 
 function findBestMove(player) {
-  const winPatterns = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
-
+  const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   for (const pattern of winPatterns) {
     const [a, b, c] = pattern;
     const values = [board[a], board[b], board[c]];
     if (values.filter(v => v === player).length === 2 && values.includes("")) {
-      const emptyIndex = pattern[values.indexOf("")];
-      return emptyIndex;
+      return pattern[values.indexOf("")];
     }
   }
-
   return -1;
 }
 
@@ -236,12 +279,7 @@ function updateBoard() {
 }
 
 function checkWinner(player) {
-  const winPatterns = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
-
+  const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return winPatterns.some(pattern => pattern.every(i => board[i] === player));
 }
 
@@ -254,75 +292,60 @@ function updateScore() {
   document.getElementById("botWins").textContent = botWins;
 }
 
-
-// ⌨️ TYPING SPEED GAME
-// Global variables for timing
-let typingStart = null;
-let typingExpected = "";
-
+// TYPING SPEED GAME
 let typingStartTime = null;
 let typingSentence = "";
 
-// 👇 Call this in loadGame
 function generateTypingGame() {
-    const sentences = [
-      "The keyboard fears your laziness.",
-      "Focus is overrated. Let's just play.",
-      "You better type fast. Your future depends on it.",
-      "Procrastination is an art, and you're an artist.",
-      "Typing tests are the adult version of hide and seek."
-    ];
-  
-    typingSentence = sentences[Math.floor(Math.random() * sentences.length)];
-    typingStartTime = null;
-  
-    setTimeout(() => {
-      const input = document.getElementById("typingInput");
-      const display = document.getElementById("sentenceDisplay");
-      const result = document.getElementById("typingResult");
-      input.focus();
-  
-      input.addEventListener("input", function () {
-        const userInput = this.value;
-  
-        if (!typingStartTime && userInput.length > 0) {
-          typingStartTime = performance.now();
-        }
-  
-        // Highlight each letter
-        let highlighted = "";
-        for (let i = 0; i < typingSentence.length; i++) {
-          const userChar = userInput[i];
-          const correctChar = typingSentence[i];
-  
-          if (userChar == null) {
-            highlighted += `<span>${correctChar}</span>`;
-          } else if (userChar === correctChar) {
-            highlighted += `<span style="color:lightgreen">${correctChar}</span>`;
-          } else {
-            highlighted += `<span style="color:red">${correctChar}</span>`;
-          }
-        }
-        display.innerHTML = highlighted;
-  
-        // End condition
-        if (userInput === typingSentence) {
-          const duration = (performance.now() - typingStartTime) / 1000;
-          const wpm = Math.round(typingSentence.split(" ").length / (duration / 60));
-          result.textContent = `👏 Done in ${duration.toFixed(2)}s — ${wpm} WPM. Not bad.`;
+  const sentences = [
+    "The keyboard fears your laziness.",
+    "Focus is overrated. Let's just play.",
+    "You better type fast. Your future depends on it.",
+    "Procrastination is an art, and you're an artist.",
+    "Typing tests are the adult version of hide and seek."
+  ];
+  typingSentence = sentences[Math.floor(Math.random() * sentences.length)];
+  typingStartTime = null;
+
+  setTimeout(() => {
+    const input = document.getElementById("typingInput");
+    const display = document.getElementById("sentenceDisplay");
+    const result = document.getElementById("typingResult");
+    input.focus();
+    input.addEventListener("input", function () {
+      const userInput = this.value;
+      if (!typingStartTime && userInput.length > 0) {
+        typingStartTime = performance.now();
+      }
+      let highlighted = "";
+      for (let i = 0; i < typingSentence.length; i++) {
+        const userChar = userInput[i];
+        const correctChar = typingSentence[i];
+        if (userChar == null) {
+          highlighted += `<span>${correctChar}</span>`;
+        } else if (userChar === correctChar) {
+          highlighted += `<span style="color:lightgreen">${correctChar}</span>`;
         } else {
-          result.textContent = "Keep typing, mortal...";
+          highlighted += `<span style="color:red">${correctChar}</span>`;
         }
-      });
-    }, 0);
-  
-    return `
-      <p id="sentenceDisplay">${typingSentence}</p>
-      <input type="text" id="typingInput" placeholder="Start typing..." />
-      <p id="typingResult"></p>
-      <div style="text-align:center; margin-top:10px;">
-      <button onclick="loadGame('typingSpeed', document.getElementById('typingSpeed'))">🔁 Restart</button>
-      </div>
-    `;
-  }
-  
+      }
+      display.innerHTML = highlighted;
+      if (userInput === typingSentence) {
+        const duration = (performance.now() - typingStartTime) / 1000;
+        const wpm = Math.round(typingSentence.split(" ").length / (duration / 60));
+        result.textContent = `👏 Done in ${duration.toFixed(2)}s — ${wpm} WPM. Not bad.`;
+      } else {
+        result.textContent = "Keep typing, mortal...";
+      }
+    });
+  }, 0);
+
+  return `
+    <p id="sentenceDisplay">${typingSentence}</p>
+    <input type="text" id="typingInput" placeholder="Start typing..." />
+    <p id="typingResult"></p>
+    <div style="text-align:center; margin-top:10px;">
+    <button onclick="loadGame('typingSpeed', document.getElementById('typingSpeed'))">🔁 Restart</button>
+    </div>
+  `;
+}
