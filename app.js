@@ -404,3 +404,38 @@ function generateTypingGame() {
   `;
 }
 
+// Funny sarcastic responses
+const aiResponses = [
+  "Error 404: Motivation not found.",
+  "That's cute. Did you try turning it off and on?",
+  "I could help... but where’s the fun in that?",
+  "Is this what humans call 'progress'?",
+  "I’d help, but my coffee hasn’t finished booting up.",
+  "Hold on, let me pretend to think…",
+  "You again? I thought we were done."
+];
+
+function sendMessage() {
+  const input = document.getElementById("userMessage");
+  const message = input.value.trim();
+  if (!message) return;
+
+  // Show user message
+  addChatMessage(message, "user");
+  input.value = "";
+
+  // AI "thinking" delay
+  setTimeout(() => {
+    const reply = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+    addChatMessage(reply, "ai");
+  }, 1000);
+}
+
+function addChatMessage(text, sender) {
+  const chatMessages = document.getElementById("chatMessages");
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("chat-message", sender);
+  messageDiv.textContent = text;
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+}

@@ -35,20 +35,20 @@
       <div class="task-controls">
         <input type="text" id="taskInput" placeholder="What fake goal are you pretending to achieve?" /> 
         <select id="colorPicker">
-          <option value="Color">Color</option>
+          <option value="Color"> <i>Color</i> </option>
           <option value="yellow">🟡</option>
           <option value="red">🔴</option>
           <option value="green">🟢</option>
           <option value="blue">🔵</option>
         </select>
         <select id="tagPicker">
-          <option value="">Tag</option>
+          <option value=""> <i>Tag</i> </option>
           <option value="Procrastination">Procrastination</option>
           <option value="Chaos">Chaos</option>
           <option value="Random">Random</option>
         </select>
-        <button onclick="addTask()">Add</button>
-        <button onclick="suggestTask()">🎲 Suggest A Task</button>
+        <button onclick="addTask()"><i>Add</i></button>
+        <button onclick="suggestTask()"><i>🎲 Suggest A Task</i></button>
       </div>
 
       <div id="taskList" class="task-list"></div>
@@ -59,6 +59,14 @@
       <ul id="completedTaskList"></ul>
     </div>
 
+    <div id="aiChat" class="chat-box">
+      <div class="chat-header">🤖 HI! How can I help u</div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" id="userMessage" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>    
 
 
         
