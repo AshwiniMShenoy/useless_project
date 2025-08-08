@@ -138,8 +138,27 @@ function checkTask(id) {
   if (taskIndex === -1) return;
 
   const task = tasks[taskIndex];
-  speak(getRandomPhrase("done")); // still sarcastic
-  completedTasks.push(task); // move it to the completed pile
+
+  // Sarcastic phrases
+  const sarcasticPhrases = [
+    "Finally… you did the bare minimum.",
+    "Congrats, you’re officially done… for now.",
+    "Wow, only 3 days late!",
+    "Look at you, being all productive and stuff.",
+    "And they said it couldn’t be done… they were almost right.",
+    "Put it on your résumé: Task Finisher.",
+    "Done… unfortunately YES!",
+    "One less thing to ignore.",
+    "Congratulations, future procrastination champion!"
+  ];
+
+  // Alert before moving task
+  alert(sarcasticPhrases[Math.floor(Math.random() * sarcasticPhrases.length)]);
+
+  speak(getRandomPhrase("done")); // still sarcastic via speech
+
+  // Move task to completed
+  completedTasks.push(task) // move it to the completed pile
   tasks.splice(taskIndex, 1); // remove from active tasks
 
   renderTasks();
