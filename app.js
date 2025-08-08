@@ -1,4 +1,11 @@
 let tasks = [];
+let voices = [];
+
+window.speechSynthesis.onvoiceschanged = () => {
+  voices = speechSynthesis.getVoices();
+  console.log("Voices loaded:", voices.map(v => v.name));
+};
+
 
 function addTask() {
   const input = document.getElementById("taskInput");
@@ -71,11 +78,19 @@ function deleteTask(id) {
 }
 
 function speak(text) {
-  const msg = new SpeechSynthesisUtterance(text);
-  msg.pitch = 0.7;
-  msg.rate = 0.85;
-  speechSynthesis.speak(msg);
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voice = voices.find(v => v.name === "Google Deutsch");
+
+  if (voice) {
+    utterance.voice = voice;
+  }
+  utterance.pitch = 0.4;   // 👈 Deep tone (lower = more evil)
+  utterance.rate = 0.7;    // 👈 Slower = more dramatic
+  utterance.volume = 1.0;  // 👈 Optional — loud and clear
+  speechSynthesis.speak(utterance);
 }
+
+
 
 function suggestTask() {
   const ideas = [
@@ -306,7 +321,7 @@ function generateTypingGame() {
       <input type="text" id="typingInput" placeholder="Start typing..." />
       <p id="typingResult"></p>
       <div style="text-align:center; margin-top:10px;">
-        <button onclick="loadGame('typingSpeed', document.getElementById('typingSpeed'))">🔁 Restart</button>
+      <button onclick="loadGame('typingSpeed', document.getElementById('typingSpeed'))">🔁 Restart</button>
       </div>
     `;
   }
