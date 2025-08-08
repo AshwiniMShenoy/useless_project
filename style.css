@@ -8,18 +8,32 @@ body {
   .container {
     max-width: 600px;
     margin: auto;
+    margin-top: 130px;
   }
   
-  h1 {
+  .head {
     color: red;
     text-align: center;
-    margin-bottom: 20px;
+    width: 330px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    margin-left: 130px;
+    font-size: 50px;
+    font-family: cursive;
+  }
+
+  p{
+    font-family: cursive;
+    text-align: center;
+    margin-left: 30px;
   }
   
   .task-controls {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    padding: 20px;
   }
   
   .task-controls input, select, button {
@@ -68,6 +82,7 @@ body {
     width: 250px;
     background-color: #1a1a1a;
     padding: 20px;
+    padding-left: 20px;
     border-right: 1px solid #333;
     border-radius: 10px;
   }
@@ -110,4 +125,84 @@ body {
   
   
   
+  body {
+  font-family: Arial, sans-serif;
+}
+
+.evil-title {
+  font-size: 2rem;
+  color: darkred;
+  font-weight: bold;
+}
+
+.sarcasm {
+  font-style: italic;
+  color: gray;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+}
+
+.task-item span {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.task-yellow { background-color: #fff9c4; }
+.task-red { background-color: #ffcdd2; }
+.task-green { background-color: #c8e6c9; }
+.task-blue { background-color: #bbdefb; }
+
+.sidebar {
+  min-height: 100vh;
+}
+
+.game-container {
+  display: none;
+  padding: 10px;
+  background: #a58383;
+  border-radius: 8px;
+}
+#completedTaskList {
+  padding-left: 20px;
+  width: 250px;
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-right: 1px solid #333;
+  border-radius: 10px;
+}
+
+#completedTaskList li {
+  list-style-type: decimal;
+  margin-bottom: 10px;
+}
+
+.task-card.completed {
+  opacity: 0.5;
+  background-color: #2e2e2e;
+}
+
+.task-card.completed .content {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.task-bar {
+  background-color: #2a2a2a;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: none;
+  font-size: 0.9rem;
   
+}
+
+h3{
+  font-family: Georgia, 'Times New Roman', Times, serif ;
+}

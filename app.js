@@ -92,6 +92,7 @@ function renderTasks() {
         <button onclick="pinTask(${task.id})">📌</button>
         <button onclick="editTask(${task.id})">✏️</button>
         <button onclick="deleteTask(${task.id})">🗑️</button>
+        <button onclick="checkTask(${task.id})">✅</button>
       </div>
     `;
     list.appendChild(card);
@@ -129,6 +130,40 @@ function deleteTask(id) {
   tasks = tasks.filter(t => t.id !== id);
   renderTasks();
 }
+
+let completedTasks = [];
+
+function checkTask(id) {
+  const taskIndex = tasks.findIndex(t => t.id === id);
+  if (taskIndex === -1) return;
+
+  const task = tasks[taskIndex];
+  speak(getRandomPhrase("done")); // still sarcastic
+  completedTasks.push(task); // move it to the completed pile
+  tasks.splice(taskIndex, 1); // remove from active tasks
+
+  renderTasks();
+  renderCompletedTasks();
+}
+
+function renderCompletedTasks() {
+  const completedList = document.getElementById("completedTaskList");
+  completedList.innerHTML = "";
+
+  completedTasks.forEach((task) => {
+    const card = document.createElement("div");
+    card.className = "task-card completed";
+    card.style.borderLeft = `5px solid ${task.color || "#555"}`;
+
+    card.innerHTML = `
+      <div class="content"><s>${task.text}</s></div>
+      <div class="tag">${task.tag || "No Tag"}</div>
+    `;
+
+    completedList.appendChild(card);
+  });
+}
+
 
 function suggestTask() {
   const ideas = [
@@ -349,3 +384,4 @@ function generateTypingGame() {
     </div>
   `;
 }
+
