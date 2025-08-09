@@ -57,7 +57,7 @@ A task is added to the list.
 ![alt text](done.jpg)
 Task completed is shown.
 
-![alt text](typng game.jpg)
+![alt text](typing game.jpg)
 Typing game is being played.
 
 ## Team Contributions
