@@ -24,6 +24,16 @@
         <button onclick="toggleGame('typingSpeed')">Typing Speed Game</button>
         <div id="typingSpeed" class="game-container"></div>
       </div>
+
+      <div id="aiChat" class="chat-box">
+        <div class="chat-header">🤖 Hey Buddy!!</div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input">
+          <input type="text" id="userMessage" placeholder="How can i help you?" />
+            
+          <br><button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
     </div>
 
     <!-- 😈 Evil Task Manager -->
@@ -57,15 +67,6 @@
     <div class="task_bar">
       <h3>"Achievement unlocked: Basic Human Function."</h3>
       <ul id="completedTaskList"></ul>
-    </div>
-
-    <div id="aiChat" class="chat-box">
-      <div class="chat-header">🤖 Hey Buddy!!</div>
-      <div id="chatMessages" class="chat-messages"></div>
-      <div class="chat-input">
-        <input type="text" id="userMessage" placeholder="How can i help you?" />
-        <button onclick="sendMessage()">Send</button>
-      </div>
     </div>    
 
     <div class="background" style="margin-right: 1050px;">
