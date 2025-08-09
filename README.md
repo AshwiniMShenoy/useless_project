@@ -31,16 +31,13 @@ For Software:
 ### Implementation
 For Software:
 # Installation
-[commands]
-
-# Run
-[commands]
+    No build system or external depedencies required.
 
 ### Project Documentation
 For Software:
     Code Structure:
         index.html → Main webpage structure
-        style.css → Styling, including theme modes (lazy, villain, chaos)
+        style.css → Styling, including theme modes (lazy, villain)
         app.js → Core logic for task management, theme switching, evil narration, and mini-games
 
     Key Features:
@@ -50,24 +47,18 @@ For Software:
         Built-in games: Tic Tac Toe with smart bot + Typing Speed Test
         Theme switcher (Lazy, Villain modes)
 
-# Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+# Screenshots
+![alt text](image.png)
+The Initial Page with all the components.
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+![alt text](add.jpg)
+A task is added to the list.
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+![alt text](done.jpg)
+Task completed is shown.
 
-
-### Project Demo
-# Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
-
-# Additional Demos
-[Add any extra demo materials/links]
+![alt text](typng game.jpg)
+Typing game is being played.
 
 ## Team Contributions
 - ASHWINI M SHENOY : Feature refining
